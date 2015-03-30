@@ -1,0 +1,36 @@
+md-content
+    md-toolbar#top.md-default-theme(layout="row" layout-align="space-between center")
+        .md-toolbar-tools
+            span Material Reddit
+        .search_bar(layout="row" layout-align="space-between center")
+            h3.md-caption /r/
+            md-input-container.subredditInput
+                label Subreddit
+                input(type="text" ng-model="inputSubreddit" ng-init="inputSubreddit='pics'" ng-keyup="getRedditKeyDown($event)")
+            md-button.button(type="button" ng-click="getReddit(inputSubreddit)" style="width:100px;").md-raised.md-blue: b.text-white Go
+
+    //- h1.text-info Loading data for /r/{{inputSubreddit}}...
+    md-content.objectBody(flex)
+        section(ng-if="!srData" layout="column" layout-align="center center")
+            md-progress-linear(md-mode="indeterminate" )
+            h2 Please enter a subreddit.
+        md-grid-list.objectGrid(md-cols-sm="1" md-cols="2" md-gutter="1em" md-row-height="170px" style="margin-top: 1em;")
+            md-grid-tile.md-whiteframe-z2.objectContainer(ng-if="srData" ng-repeat="r in srData" layout layout-align="start start")
+                md-item-content(flex layout='row' layout-align="center start")
+                    md-button.md-tile-left.thumb.md-whiteframe-z2(layout='column' ng-click="showDialog($event, r.data.url)" aria-label="thumbnail")
+                        img.media-object(ng-if="r.data.thumbnail.length > 10" src="{{r.data.thumbnail}}")
+                        img.media-object(ng-if="!r.data.thumbnail || ['self', 'default'].indexOf(r.data.thumbnail) > -1" src="http://placehold.it/140x78")
+                    .md-tile-content.text(layout='column' layout-align="space-between start")
+                        h4.md-headline(flex): b
+                            a(href="{{r.data.url}}") {{r.data.title}}
+                            md-button.md-warn.md-raised(type="button" ng-click="log(r.data)"): b dev
+                        md-chips
+                            span.md-caption [{{r.data.ups}}]
+                            span.md-caption: b  Comments:
+                            md-chip.mg-warn
+                                a(href="http://reddit.com{{r.data.permalink}}")
+                                    b.text-danger [{{r.data.num_comments}}]
+    md-content.md-whiteframe-z3.md-padding(layout="row" layout-align="center center" style="margin-top: 1em; margin-bottom: 1em;")
+        md-button.md-raised.md-primary.md-hue-2 Prev
+        md-button.md-raised.md-warn.disabled(style="margin-left: 1em; margin-right: 1em;") Page {{curPage}}
+        md-button.md-raised.md-primary(ng-click="grabNext()") Next

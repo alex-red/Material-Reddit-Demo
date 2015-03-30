@@ -1,0 +1,39 @@
+
+<md-content>
+  <md-toolbar id="top" layout="row" layout-align="space-between center" class="md-default-theme">
+    <div class="md-toolbar-tools"><span>Material Reddit</span></div>
+    <div layout="row" layout-align="space-between center" class="search_bar">
+      <h3 class="md-caption">/r/</h3>
+      <md-input-container class="subredditInput">
+        <label>Subreddit</label>
+        <input type="text" ng-model="inputSubreddit" ng-init="inputSubreddit='pics'" ng-keyup="getRedditKeyDown($event)"/>
+      </md-input-container>
+      <md-button type="button" ng-click="getReddit(inputSubreddit)" style="width:100px;" class="button md-raised md-blue"><b class="text-white">Go</b></md-button>
+    </div>
+  </md-toolbar>
+  <md-content flex="flex" class="objectBody">
+    <section ng-if="!srData" layout="column" layout-align="center center">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      <h2>Please enter a subreddit.</h2>
+    </section>
+    <md-grid-list md-cols-sm="1" md-cols="2" md-gutter="1em" md-row-height="170px" style="margin-top: 1em;" class="objectGrid">
+      <md-grid-tile ng-if="srData" ng-repeat="r in srData" layout="layout" layout-align="start start" class="md-whiteframe-z2 objectContainer">
+        <md-item-content flex="flex" layout="row" layout-align="center start">
+          <md-button layout="column" ng-click="showDialog($event, r.data.url)" aria-label="thumbnail" class="md-tile-left thumb md-whiteframe-z2"><img ng-if="r.data.thumbnail.length &gt; 10" src="{{r.data.thumbnail}}" class="media-object"/><img ng-if="!r.data.thumbnail || ['self', 'default'].indexOf(r.data.thumbnail) &gt; -1" src="http://placehold.it/140x78" class="media-object"/></md-button>
+          <div layout="column" layout-align="space-between start" class="md-tile-content text">
+            <h4 flex="flex" class="md-headline"><b><a href="{{r.data.url}}">{{r.data.title}}</a>
+                <md-button type="button" ng-click="log(r.data)" class="md-warn md-raised"><b>dev</b></md-button></b></h4>
+            <md-chips><span class="md-caption">[{{r.data.ups}}]</span><span class="md-caption"><b> Comments:</b></span>
+              <md-chip class="mg-warn"><a href="http://reddit.com{{r.data.permalink}}"><b class="text-danger">[{{r.data.num_comments}}]</b></a></md-chip>
+            </md-chips>
+          </div>
+        </md-item-content>
+      </md-grid-tile>
+    </md-grid-list>
+  </md-content>
+  <md-content layout="row" layout-align="center center" style="margin-top: 1em; margin-bottom: 1em;" class="md-whiteframe-z3 md-padding">
+    <md-button class="md-raised md-primary md-hue-2">Prev</md-button>
+    <md-button style="margin-left: 1em; margin-right: 1em;" class="md-raised md-warn disabled">Page {{curPage}}</md-button>
+    <md-button ng-click="grabNext()" class="md-raised md-primary">Next</md-button>
+  </md-content>
+</md-content>

@@ -1,0 +1,7 @@
+md-dialog.showDisplay(aria-label="Display")
+    md-content.imageContainer(layout layout-align="center center")
+        img.image(ng-if="contentType=='pic'" src="{{currentImg}}")
+        img.image(ng-if="contentType=='gifv'" src="{{currentImg.substr(0,currentImg.length - 1)}}")
+        img.image(ng-if="contentType=='imgurPic'" ng-src="{{sanitizeImgur(currentImg)}}")
+        iframe.image(ng-if="contentType=='imgurAlbum'" class="imgur-album" width="100%" height="550" frameborder="0" ng-src="{{sanitizeImgurAlbum(currentImg) | trusted}}")
+        iframe.image(ng-if="contentType=='WEBM'" ng-src="{{sanitizeWEBM(currentImg) | trusted}}" frameborder="0" scrolling="no" width="100%" height="400px" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);")
