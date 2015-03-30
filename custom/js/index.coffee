@@ -108,6 +108,7 @@ homeCtrl = ($scope, $interval, $http, $mdDialog, $location, $anchorScroll) ->
                 data = data.substr 0, data.length - 1
                 data = JSON.parse data
                 parseData data
+                $scope.curPage += 1
             .error (e) ->
                 console.log e, 'error!'
 
