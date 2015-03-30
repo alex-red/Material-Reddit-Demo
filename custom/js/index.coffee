@@ -82,47 +82,54 @@ homeCtrl = ($scope, $interval, $http, $mdDialog, $location, $anchorScroll) ->
             $scope.getReddit($scope.inputSubreddit)
     # Get subreddit objects
     parseData = (d) ->
-        dataList = d.data.children # List of feed objects
-        $scope.srData = dataList
+        try
+            dataList = d.data.children # List of feed objects
+            $scope.srData = dataList
+        catch err
+            console.log "Error: #{err}"
+        console.log typeof dataList
     $scope.getReddit = (sr) ->
         $scope.curPage = 1
         # sr = subreddit
         $scope.test = sr
-        URL = "http://www.reddit.com/r/#{sr}/.json?count=26"
+        URL = "http://www.reddit.com/r/#{sr}/.json?count=25&jsonp=JSON_CALLBACK"
         console.log URL
 
-        $http(
-            method: 'GET'
-            url: URL
-        ).success((d)-> # Got subreddit info, parse
-            parseData d)
-        .error((d)->
-            console.log "error")
+        # $http(
+        #     method: 'GET'
+        #     url: URL
+        # ).success((d)-> # Got subreddit info, parse
+        #     parseData d)
+        # .error((d)->
+        #     console.log "error")
+        $http.get(URL)
+            .success (d) ->
+                data = d.substr d.indexOf('(') + 1
+                data = data.substr 0, data.length - 1
+                data = JSON.parse data
+                parseData data
+            .error (e) ->
+                console.log e, 'error!'
 
 
+    $scope.grabNext = ->
+        last = $scope.srData[24]
+        id = last.data.name
+        subreddit = $scope.inputSubreddit
+        URL = "http://www.reddit.com/r/#{subreddit}/.json?count=25&after=#{id}&jsonp=JSON_CALLBACK"
+        $scope.srData = null
+        $http.get(URL)
+            .success (d) ->
+                data = d.substr d.indexOf('(') + 1
+                data = data.substr 0, data.length - 1
+                data = JSON.parse data
+                parseData data
+            .error (e) ->
+                console.log e, 'error!'
 
-        $scope.grabNext = ->
-            last = $scope.srData[24]
-            id = last.data.name
-            subreddit = $scope.inputSubreddit
-            URL = "http://www.reddit.com/r/#{subreddit}/.json?count=25&after=#{id}"
-            $scope.srData = null
-            $http(
-                method: 'GET'
-                url: URL
-            ).success((d)-> # Got subreddit info, parse
-                parseData d
-                $scope.curPage += 1
-                $location.hash 'top'
-                $anchorScroll()
-                )
-
-            .error((d)->
-                console.log "error")
-
-        init = ->
-            return
-        init()
+    init = ->
+        return
+    init()
 
 DisplayController = ($scope, $mdDialog, currentImg, contentType) ->
     $scope.currentImg = currentImg
