@@ -54,6 +54,12 @@ body {
 .objectContainer .text b {
   height: 50px;
 }
+.objectContainer .text a {
+  text-decoration: none;
+}
+.objectContainer .text a:hover {
+  text-decoration: underline;
+}
 .showDisplay {
   min-width: 80%;
 }
