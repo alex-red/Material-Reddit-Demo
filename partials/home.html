@@ -22,7 +22,6 @@
           <md-button layout="column" ng-click="showDialog($event, r.data.url)" aria-label="thumbnail" class="md-tile-left thumb md-whiteframe-z2"><img ng-if="r.data.thumbnail.length &gt; 10" src="{{r.data.thumbnail}}" class="media-object"/><img ng-if="!r.data.thumbnail || ['self', 'default'].indexOf(r.data.thumbnail) &gt; -1" src="http://placehold.it/140x78" class="media-object"/></md-button>
           <div layout="column" layout-align="space-between start" class="md-tile-content text">
             <h4 flex="flex" class="md-headline"><b><a href="{{r.data.url}}">{{r.data.title}}</a>
-                <md-button type="button" ng-click="log(r.data)" class="md-warn md-raised"><b>dev</b></md-button></b></h4>
             <md-chips><span class="md-caption">[{{r.data.ups}}]</span><span class="md-caption"><b> Comments:</b></span>
               <md-chip class="mg-warn"><a href="http://reddit.com{{r.data.permalink}}"><b class="text-danger">[{{r.data.num_comments}}]</b></a></md-chip>
             </md-chips>
